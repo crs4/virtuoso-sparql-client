@@ -11,7 +11,7 @@ Getting Started
 ### Use
 
     const Sparql = require('simple-sparql-client');
-    const Client = new Sparql.Client(http://dbpedia.org/sparql, {dbpedia : "http://dbpedia.org/"});
+    const Client = new Sparql.Client("http://dbpedia.org/sparql", {dbpedia : "http://dbpedia.org/"});
 
     let opts = {
       headers: {
@@ -34,7 +34,7 @@ Core API
 
 ### query
 
-    Returns the complete results object, its formats depends on request header in the opts object.
+    Returns the complete results object, its format depends on request header in the opts object.
     Opts object defines:
       uri: "",        // To change the default Client endpoint
       headers: {},
