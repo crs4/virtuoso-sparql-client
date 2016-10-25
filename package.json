@@ -1,0 +1,55 @@
+{
+  "name": "simple-sparql-client",
+  "version": "0.0.1",
+  "author": "Ivan Marcialis <ivan@crs4.it> (http://www.crs4.it/it/peopledetails/73/ivan-marcialis/)",
+  "contributors": [
+    "Stedano Fadda <stefano@crs4.it> (http://www.crs4.it/peopledetails/432/stefano-salvatore-fadda/)",
+    "Alberto Farci <farci@crs4.it> (http://www.crs4.it/peopledetails/430/alberto-farci/)",
+    "Gianluca Malagnini <gianluca@crs4.it> (http://www.crs4.it/peopledetails/431/gian-luca-malagnini/)",
+    "Emanuela De Vita <emy@crs4.it> (http://www.crs4.it/peopledetails/65/emanuela-de-vita/)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "request": "1.9.0",
+    "querystring": "0.2.0"
+  },
+  "description": "Simple SPARQL client",
+  "directories": {
+    "lib": "./lib"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "keywords": [
+    "sparql",
+    "rdf",
+    "linkeddata",
+    "http-headers",
+    "virtuoso",
+    "request"
+  ],
+  "maintainers": [
+    {
+      "name": "IvanMarcialis",
+      "email": "ivan@crs4.it"
+    },
+    {
+      "name": "StefanoF",
+      "email": "stefano@crs4.it"
+    },
+    {
+      "name": "mintoman",
+      "email": "gianluca@crs4.it"
+    },
+    {
+      "name": "albertfarci",
+      "email": "farci@crs4.it"
+    },
+    {
+      "name": "manudvt",
+      "email": "emy@crs4.it"
+    }
+  ]
+
+}
