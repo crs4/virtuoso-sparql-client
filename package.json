@@ -1,6 +1,6 @@
 {
   "name": "simple-sparql-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Ivan Marcialis <ivan@crs4.it> (http://www.crs4.it/it/peopledetails/73/ivan-marcialis/)",
   "contributors": [
     "Stedano Fadda <stefano@crs4.it> (http://www.crs4.it/peopledetails/432/stefano-salvatore-fadda/)",
@@ -20,6 +20,10 @@
   "main": "index.js",
   "engines": {
     "node": ">= 6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crs4/SimpleSparqlClient"
   },
   "keywords": [
     "sparql",
