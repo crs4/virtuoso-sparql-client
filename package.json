@@ -1,6 +1,6 @@
 {
   "name": "simple-sparql-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Ivan Marcialis <ivan@crs4.it> (http://www.crs4.it/it/peopledetails/73/ivan-marcialis/)",
   "contributors": [
     "Stedano Fadda <stefano@crs4.it> (http://www.crs4.it/peopledetails/432/stefano-salvatore-fadda/)",
@@ -55,5 +55,4 @@
       "email": "emy@crs4.it"
     }
   ]
-
 }
