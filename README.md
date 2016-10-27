@@ -1,24 +1,19 @@
-Simple SPARQL HTTP Client library for Node.js
+Virtuoso SPARQL HTTP Client for Node.js
 =============================================
 
-## install
+## Install
 ```
-    npm install sparql-simple-client
+npm install virtuoso-sparql-client
 ```
 
-## usage
+## Usage
 ```js
-const Sparql = require('simple-sparql-client');
-const Client = new Sparql.Client("http://dbpedia.org/sparql", {dbpedia : "http://dbpedia.org/"});
+const Sparql = require('virtuoso-sparql-client');
+const Client = new Sparql.Client("http://dbpedia.org/sparql");
 
-let opts = {
-  headers: {
-    'content-type': 'application/x-www-form-urlencoded',
-    'accept': 'application/ld+json'
-  }
-};
+Client.setOptions("application/ld+json");
 
-Client.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>', opts)
+Client.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>')
   .then((results)=>{
     console.log(results);
   })
@@ -27,26 +22,58 @@ Client.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>', opts)
   });
 ```
 
-## methods
+## Methods
 
-#### `query(queryString [, opts])`
-
-Returns the complete results object, its format depends on request header in the opts object.
+#### `query(queryString)`
+Returns the complete results object, it's format is setted from setOptions Client method.
 
 `queryString` defines the SPARQL query as a String;
 
-`Opts` object defines:
-* uri: "",        // To change the default Client endpoint
-* headers: {},
-* encoding: '',   // Default: utf8
-* prefixes: {}    // To override the default Client prefixes
+#### `setOptions([format, prefixes, graph])`
+Set the default options for the Client
 
-#### `setDefaultGraph(iri)`
-Set the default graph for the Client
+`format` the default format as a String (ex. 'application/json'); [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats)
+
+`prefixes` list of default prefixes as an Object;
+```js
+let prefixes = {
+  po      : "http://po.example.org/2016/08/po-schema/",
+  ba      : "http://example.org/ontology/ba#"
+};
+```
+
+`graph` the default graph iri as a String;
+
+#### `setQueryGraph(iri)`
+Set the graph for the query
 
 `iri` the graph iri as a String;
 
-#### `setGraph(iri)`
-Set a graph for the next query
+#### `setQueryFormat(format)`
+Set a format for the query
 
-`iri` the graph iri as a String;
+`format` the format as a String (ex. 'application/json');
+
+#### `setQueryPrefixes(prefixes)`
+Set a list of prefixes for the query
+
+`prefixes` list of prefixes as an Object;
+```js
+let prefixes = {
+  po      : "http://po.example.org/2016/08/po-schema/",
+  ba      : "http://example.org/ontology/ba#"
+};
+```
+
+#### `setQueryMaxrows(rows)`
+Set a maximum numbers of rows that should be returned by the query
+
+`rows` maximum number;
+
+## Notes
+#### `Supported Parameters`
+* query
+* default-graph-uri
+* maxrows
+
+[Virtuoso HTTP Request Parameters](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#HTTP%20Request%20Parameters)

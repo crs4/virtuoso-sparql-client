@@ -1,1 +1,1 @@
-module.exports = require('./lib/sparql');
+module.exports = require('./lib/client');
