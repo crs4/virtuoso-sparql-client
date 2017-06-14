@@ -1,6 +1,6 @@
 {
   "name": "virtuoso-sparql-client",
-  "version": "0.0.1",
+  "version": "0.0.5",
   "author": "Ivan Marcialis <ivan@crs4.it> (http://www.crs4.it/it/peopledetails/73/ivan-marcialis/)",
   "contributors": [
     "Stedano Fadda <stefano@crs4.it> (http://www.crs4.it/peopledetails/432/stefano-salvatore-fadda/)",
