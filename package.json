@@ -1,38 +1,15 @@
 {
   "name": "virtuoso-sparql-client",
-  "version": "0.0.5"
+  "version": "0.0.6",
   "description": "Simple Virtuoso SPARQL client",
-  "keywords": [
-    "sparql",
-    "rdf",
-    "linkeddata",
-    "http-headers",
-    "virtuoso",
-    "request"
-  ],
   "author": {
     "name": "Ivan Marcialis",
     "email": "ivan@crs4.it",
     "url": "http://www.crs4.it/it/peopledetails/73/ivan-marcialis/"
   },
-  "maintainers": [
-    {
-      "name": "albertofarci",
-      "email": "farci@crs4.it"
-    },
-    {
-      "name": "gianlucam",
-      "email": "gianluca@crs4.it"
-    },
-    {
-      "name": "ivanmarcialis",
-      "email": "ivan@crs4.it"
-    },
-    {
-      "name": "stefanofadda",
-      "email": "stefanofaddajob@gmail.com"
-    }
-  ],
+  "bugs": {
+    "url": "https://github.com/crs4/virtuoso-sparql-client/issues"
+  },
   "contributors": [
     {
       "name": "Stedano Fadda",
@@ -55,15 +32,13 @@
       "url": "http://www.crs4.it/peopledetails/65/emanuela-de-vita/"
     }
   ],
-  "bugs": {
-    "url": "https://github.com/crs4/virtuoso-sparql-client/issues"
-  },
   "dependencies": {
     "querystring": "0.2.0",
     "request": "1.9.0",
     "validator": "^6.1.0"
   },
-  "devDependencies": {},
+
+
   "directories": {
     "lib": "./lib"
   },
@@ -71,12 +46,38 @@
     "node": ">= 6.0.0"
   },
   "homepage": "https://github.com/crs4/virtuoso-sparql-client#readme",
+  "keywords": [
+    "sparql",
+    "rdf",
+    "linkeddata",
+    "http-headers",
+    "virtuoso",
+    "request"
+  ],
+  "license": "MIT",
   "main": "index.js",
-  "optionalDependencies": {},
+  "maintainers": [
+    {
+      "name": "albertofarci",
+      "email": "farci@crs4.it"
+    },
+    {
+      "name": "gianlucam",
+      "email": "gianluca@crs4.it"
+    },
+    {
+      "name": "ivanmarcialis",
+      "email": "ivan@crs4.it"
+    },
+    {
+      "name": "stefanofadda",
+      "email": "stefanofaddajob@gmail.com"
+    }
+  ],
+  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crs4/virtuoso-sparql-client.git"
   },
-  "scripts": {},
-  "license": "MIT"
+  "scripts": {}
 }
