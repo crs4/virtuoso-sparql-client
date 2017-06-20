@@ -2,13 +2,19 @@
   "name": "virtuoso-sparql-client",
   "version": "0.0.6",
   "description": "Simple Virtuoso SPARQL client",
+  "homepage": "https://github.com/crs4/virtuoso-sparql-client#readme",
+  "keywords": [
+    "sparql",
+    "rdf",
+    "linkeddata",
+    "http-headers",
+    "virtuoso",
+    "request"
+  ],
   "author": {
     "name": "Ivan Marcialis",
     "email": "ivan@crs4.it",
     "url": "http://www.crs4.it/it/peopledetails/73/ivan-marcialis/"
-  },
-  "bugs": {
-    "url": "https://github.com/crs4/virtuoso-sparql-client/issues"
   },
   "contributors": [
     {
@@ -32,30 +38,6 @@
       "url": "http://www.crs4.it/peopledetails/65/emanuela-de-vita/"
     }
   ],
-  "dependencies": {
-    "querystring": "0.2.0",
-    "request": "1.9.0",
-    "validator": "^6.1.0"
-  },
-
-
-  "directories": {
-    "lib": "./lib"
-  },
-  "engines": {
-    "node": ">= 6.0.0"
-  },
-  "homepage": "https://github.com/crs4/virtuoso-sparql-client#readme",
-  "keywords": [
-    "sparql",
-    "rdf",
-    "linkeddata",
-    "http-headers",
-    "virtuoso",
-    "request"
-  ],
-  "license": "MIT",
-  "main": "index.js",
   "maintainers": [
     {
       "name": "albertofarci",
@@ -74,10 +56,26 @@
       "email": "stefanofaddajob@gmail.com"
     }
   ],
+  "dependencies": {
+    "querystring": "0.2.0",
+    "request": "1.9.0",
+    "validator": "^6.1.0"
+  },
+  "bugs": {
+    "url": "https://github.com/crs4/virtuoso-sparql-client/issues"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "engines": {
+    "node": ">= 6.0.0"
+  },
+  "main": "index.js",
   "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crs4/virtuoso-sparql-client.git"
   },
-  "scripts": {}
+  "scripts": {},
+  "license": "MIT"
 }
