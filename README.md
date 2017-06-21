@@ -63,11 +63,20 @@ SaveClient.store(true)
 #### `query(queryString [, echo])`
 Executes the query, returns a Promise that, when resolved, gives the complete result object.
  - `queryString` defines the SPARQL query as a String;
- - `echo` set to 'true' to print query in standard console, 'false' is the default value;
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value;
 
 #### `store([echo])`
 Remotely stores the triples locally saved onto the endpoint and cleans the local triple store.
- - `echo` set to 'true' to print query in standard console, 'false' is the default value;
+Invokes the 'query' method and returns its Promise
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value;
+
+#### `map(className, keyProperty [, recursive [, echo]])`
+Returns a Promise that, when resolved, gives a Map object where the key is the value property and the value is the related Individual IRI.
+ - `className` the rdf:type of Individuals on which the map is created. Accept complete URI or prefix:ClassName if the client knows it.
+ - `keyProperty` the property which becomes the map key. Accept complete URI or prefix:ClassName if the client knows it.
+ - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value;
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value;
+
 
 ## Util Methods
 #### `getLocalStore()`
