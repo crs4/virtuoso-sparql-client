@@ -71,7 +71,7 @@ Invokes the 'query' method and returns its Promise
  - `echo` set to 'true' to print query in standard console. 'false' is the default value;
 
 #### `map(className, keyProperty [, recursive [, echo]])`
-Returns a Promise that, when resolved, gives a Map object where the key is the value property and the value is the related Individual IRI.
+Checks if the axion "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a Map object where the key is the value property and the value is the related Individual IRI.
  - `className` the rdf:type of Individuals on which the map is created. Accept complete URI or prefix:ClassName if the client knows it.
  - `keyProperty` the property which becomes the map key. Accept complete URI or prefix:ClassName if the client knows it.
  - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value;
