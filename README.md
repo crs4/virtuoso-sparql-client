@@ -62,23 +62,29 @@ SaveClient.store(true)
 
 #### `query(queryString [, echo])`
 Executes the query, returns a Promise that, when resolved, gives the complete result object.
- - `queryString` defines the SPARQL query as a String;
- - `echo` set to 'true' to print query in standard console. 'false' is the default value;
+ - `queryString` defines the SPARQL query as a String.
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
 #### `store([echo])`
 Remotely stores the triples locally saved onto the endpoint and cleans the local triple store.
 Invokes the 'query' method and returns its Promise
- - `echo` set to 'true' to print query in standard console. 'false' is the default value;
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value
+
+#### `strip(className [, echo])`
+Deletes data from individuals which have rdf:type 'className'.
+Does not remove statements where the property is dcterms:created and where the property is a 'className' owl:hasKey. 
+ - `className` the rdf:type of Individuals which have to be emptied. Accepts full URI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
 #### `map(className, keyProperty [, recursive [, echo]])`
 Checks if the axion "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a Map object where the key is the value property and the value is the related Individual IRI.
- - `className` the rdf:type of Individuals on which the map is created. Accept complete URI or prefix:ClassName if the client knows it.
- - `keyProperty` the property which becomes the map key. Accept complete URI or prefix:ClassName if the client knows it.
- - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value;
- - `echo` set to 'true' to print query in standard console. 'false' is the default value;
-
+ - `className` the rdf:type of Individuals on which the map is created. Accepts full URI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+ - `keyProperty` the property which becomes the map key. Accepts full URI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
+ - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value.
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
 ## Util Methods
+
 #### `getLocalStore()`
 Returns the local store, it is an instance of TripleLocalStore class and exports this methods:
  - getLocalStore().getPrefixes()
@@ -86,7 +92,7 @@ Returns the local store, it is an instance of TripleLocalStore class and exports
  - getLocalStore().addPrefixes(prefixes)
  - getLocalStore().now()                  // Returns new Date().toISOString()
  - getLocalStore().add(triple)            // 'triple' mast be an instance of Triple
- - getLocalStore().clean()                // Cleans the local store
+ - getLocalStore().empty()                // Cleans the local store
  - getLocalStore().toTriplePattern()      // Returns the Triple Pattern as a String
 
 ## Config Methods
