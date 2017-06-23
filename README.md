@@ -28,7 +28,8 @@ SaveClient = new Client("http://www.myendpoint.org/sparql");
 SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
-  "http://www.myschema.org/resource/");
+  "http://www.myschema.org/resource/"
+);
 
 SaveClient.getLocalStore().add(
   new Triple(
@@ -72,14 +73,30 @@ Invokes the 'query' method and returns its Promise
 
 #### `strip(className [, echo])`
 Deletes data from individuals which have rdf:type 'className'.
-Does not remove statements where the property is dcterms:created and where the property is a 'className' owl:hasKey. 
- - `className` the rdf:type of Individuals which have to be emptied. Accepts full URI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+Does not remove statements where the property is dcterms:created, owl:sameAs or rdf:type and where the property is a 'className' owl:hasKey.
+ - `className` the rdf:type of Individuals which have to be emptied. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
  - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
+#### `different(individuals [, echo])`
+Makes 'individuals' different.
+ - `individuals` Array of different individuals. Elements can be a full IRI or a prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+ - `echo` set to 'true' to print query in standard console. 'false' is the default value.
+
+#### `keys(className [, echo])`
+Returns a Promise that, when resolved, gives an Array that contains all the key properties for 'className'.
+- `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `echo` set to 'true' to print query in standard console. 'false' is the default value.
+
+#### `isKey(className, keyProperty [, echo])`
+Checks if 'keyProperty' is a key for 'className'. Returns a Promise that, when resolved, gives a boolean value.
+- `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `keyProperty` the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
+- `echo` set to 'true' to print query in standard console. 'false' is the default value.
+
 #### `map(className, keyProperty [, recursive [, echo]])`
-Checks if the axion "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a Map object where the key is the value property and the value is the related Individual IRI.
- - `className` the rdf:type of Individuals on which the map is created. Accepts full URI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
- - `keyProperty` the property which becomes the map key. Accepts full URI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
+Checks if the axiom "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a 'new Map()' that has the keyProperty values as keys and the related individuals IRIs as values.
+ - `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+ - `keyProperty` the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
  - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value.
  - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 

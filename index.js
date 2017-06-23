@@ -1,4 +1,3 @@
-const {ResponseFormatError, EmptyGraphError} = require('./lib/errors');
 const Client = require('./lib/client');
 const LocalTripleStore = require('./lib/localTripleStore');
 const Triple = require('./lib/triple');
@@ -8,8 +7,6 @@ const Data = require('./lib/data');
 const Node = require('./lib/node');
 
 module.exports = {
-  ResponseFormatError,
-  EmptyGraphError,
   Client,
   LocalTripleStore,
   Triple,
