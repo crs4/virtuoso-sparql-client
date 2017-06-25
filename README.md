@@ -94,7 +94,7 @@ Checks if 'keyProperty' is a key for 'className'. Returns a Promise that, when r
 - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
 #### `map(className, keyProperty [, recursive [, echo]])`
-Checks if the axiom "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a 'new Map()' that has the keyProperty values as keys and the related individuals IRIs as values.
+Checks if the axiom "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a 'new Map()' that has the keyProperty values (in lower case) as keys and the related individuals IRIs as values.
  - `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
  - `keyProperty` the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
  - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value.
