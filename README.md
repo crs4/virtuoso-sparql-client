@@ -67,8 +67,7 @@ Executes the query, returns a Promise that, when resolved, gives the complete re
  - `echo` set to 'true' to print query in standard console. 'false' is the default value.
 
 #### `store([echo])`
-Remotely stores the triples locally saved onto the endpoint and cleans the local triple store.
-Invokes the 'query' method and returns its Promise
+Stores the triples locally saved and cleans the local triple store. If the store query is bigger than 10kb (exactly 9900byte, just to be safe), it cuts the query in part smaller than 9900 byte and stores the parts one by one. Returns an array of promises that, when resolved, give the complete result object.
  - `echo` set to 'true' to print query in standard console. 'false' is the default value
 
 #### `strip(className [, echo])`
@@ -104,13 +103,20 @@ Checks if the axiom "'className' owl:hasKey 'keyProperty'" is present, if true, 
 
 #### `getLocalStore()`
 Returns the local store, it is an instance of TripleLocalStore class and exports this methods:
- - getLocalStore().getPrefixes()
- - getLocalStore().setPrefixes(prefixes)
- - getLocalStore().addPrefixes(prefixes)
- - getLocalStore().now()                  // Returns new Date().toISOString()
  - getLocalStore().add(triple)            // 'triple' mast be an instance of Triple
  - getLocalStore().empty()                // Cleans the local store
  - getLocalStore().toTriplePattern()      // Returns the Triple Pattern as a String
+ - getLocalStore().getPrefixes()
+ - getLocalStore().setPrefixes(prefixes)
+ - getLocalStore().addPrefixes(prefixes)  
+ - getLocalStore().now()                  // Returns new Date().toISOString()
+ - getLocalStore().count()                // Return the number of triples          
+The local store instances are iterable objects
+```
+for (let triple of myClient.getLocalStore()) {
+  console.log(triple)
+}
+```
 
 ## Config Methods
 

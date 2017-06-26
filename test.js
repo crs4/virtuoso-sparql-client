@@ -31,3 +31,24 @@ TestClient.setDefaultGraph("https://w3id.org/toti");
 //   console.log(JSON.stringify(result))
 // })
 // .catch(console.log);
+
+
+SaveClient = new Client("http://localhost:8890/sparql");
+SaveClient.setOptions(
+  "application/json",
+  {},
+  "TEST"
+);
+
+SaveClient.getLocalStore().add(
+  new Triple(
+    new Node("ciao"),
+    "rdfs:label",
+    new Text("(из/ житель) Ангильи", "CZ")
+  )
+);
+SaveClient.store(true)
+.then((result)=>{
+  console.log(JSON.stringify(result))
+})
+.catch(console.log)

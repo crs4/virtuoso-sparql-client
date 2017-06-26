@@ -1,6 +1,6 @@
 {
   "name": "virtuoso-sparql-client",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Simple Virtuoso SPARQL client",
   "homepage": "https://github.com/crs4/virtuoso-sparql-client#readme",
   "keywords": [
