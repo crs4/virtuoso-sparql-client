@@ -106,11 +106,11 @@ Returns the local store, it is an instance of TripleLocalStore class and exports
  - getLocalStore().add(triple)            // 'triple' mast be an instance of Triple
  - getLocalStore().empty()                // Cleans the local store
  - getLocalStore().toTriplePattern()      // Returns the Triple Pattern as a String
- - getLocalStore().getPrefixes()
- - getLocalStore().setPrefixes(prefixes)
- - getLocalStore().addPrefixes(prefixes)  
- - getLocalStore().now()                  // Returns new Date().toISOString()
- - getLocalStore().count()                // Return the number of triples          
+ - getLocalStore().prefixes               // Returns the prefixes object
+ - getLocalStore().setPrefixes(prefixes)  // Set a new object of prefixes
+ - getLocalStore().addPrefixes(prefixes)  // Add the prefixes to the local list
+ - getLocalStore().now                    // Returns new Date().toISOString()
+ - getLocalStore().size                   // Return the number of triples          
 The local store instances are iterable objects
 ```
 for (let triple of myClient.getLocalStore()) {

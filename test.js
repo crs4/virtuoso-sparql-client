@@ -44,7 +44,7 @@ SaveClient.getLocalStore().add(
   new Triple(
     new Node("ciao"),
     "rdfs:label",
-    new Text("(из/ житель) Ангильи", "CZ")
+    new Text("东加勒比元", "CZ")
   )
 );
 SaveClient.store(true)
