@@ -5,7 +5,6 @@ const Value = require('./lib/value');
 const Text = require('./lib/text');
 const Data = require('./lib/data');
 const Node = require('./lib/node');
-const Authoring = require('./lib/authoring');
 
 module.exports = {
   Client,
@@ -14,6 +13,5 @@ module.exports = {
   Value,
   Text,
   Data,
-  Node,
-  Authoring
+  Node
 };

@@ -57,9 +57,7 @@
     }
   ],
   "dependencies": {
-    "querystring": "0.2.0",
-    "request": "1.9.0",
-    "validator": "^6.1.0"
+    "request": "^2.85.0"
   },
   "bugs": {
     "url": "https://github.com/crs4/virtuoso-sparql-client/issues"
@@ -76,6 +74,8 @@
     "type": "git",
     "url": "git+https://github.com/crs4/virtuoso-sparql-client.git"
   },
-  "scripts": {},
+  "scripts": {
+    "create:dep": "npm install request --save"
+  },
   "license": "MIT"
 }
