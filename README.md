@@ -35,7 +35,7 @@ SaveClient.getLocalStore().add(
   new Triple(
     "myprefix:id123",
     "dcterms:created",
-    new Data(SaveClient.getLocalStore().now(), "xsd:dateTimeStamp")
+    new Data(SaveClient.getLocalStore().now, "xsd:dateTimeStamp")
   )
 );
 SaveClient.getLocalStore().add(
