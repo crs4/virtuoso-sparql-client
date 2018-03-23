@@ -1,31 +1,64 @@
-Virtuoso SPARQL HTTP Client for Node.js
-=============================================
+# Virtuoso SPARQL Client
+
+[![npm](https://img.shields.io/npm/v/virtuoso-sparql-client.svg)](https://www.npmjs.com/package/virtuoso-sparql-client) [![npm](https://img.shields.io/npm/dw/virtuoso-sparql-client.svg)](https://www.npmjs.com/package/virtuoso-sparql-client) [![GitHub issues](https://img.shields.io/github/issues-raw/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/issues) [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/pulls?q=is%3Apr+is%3Aclosed) [![GitHub contributors](https://img.shields.io/github/contributors/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/graphs/contributors) [![Known Vulnerabilities](https://snyk.io/test/npm/virtuoso-sparql-client/badge.svg?style=flat-square)](https://snyk.io/test/npm/virtuoso-sparql-client) [![npm](https://img.shields.io/npm/l/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/blob/master/LICENSE)
+
+> An HTTP client to using a Virtuoso SPARQL endpoint in Node.js.
+
+## Table of contents
+
+- [Install](#install)
+- [Usage](#usage)
+  - [Query](#query)
+  - [Store](#store)
+    - [Insertion triples](#insertion-triples)
+    - [Deletion triples](#deletion-triples)
+    - [Update triples](#update-triples)
+- [Client Query Methods](#client-query-methods)
+- [Client Config Methods](#client-config-methods)
+- [Client Util Methods](#client-util-methods)
+- [Triple Methods](#triple-methods)
+- [Triple Getter](#triple-getter)
 
 ## Install
-```
-npm install [--save] virtuoso-sparql-client
+
+```bash
+npm install virtuoso-sparql-client [--save]
 ```
 
 ## Usage
 
-#### Query
+### Query
+
+Use the `query()` method of an instantiated `Client` to make a custom query on a SPARQL endpoint:
+
 ```js
 const {Client} = require('virtuoso-sparql-client');
 
-let DbPediaClient = new Client("http://dbpedia.org/sparql");
+const DbPediaClient = new Client('http://dbpedia.org/sparql');
 DbPediaClient.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>')
-  .then((results)=>{
+  .then((results) => {
     console.log(results);
   })
-  .catch(console.log);
+  .catch(err) => {
+    console.log(err);
+  });
 ```
 
-#### Store
+### Store
+
+Use a `LocalTripleStore` with an instantiated `Client` filled with some triples and call the `store()` method to execute insertion, deletions or updates on a SPARQL endpoint.
+
+Note that we describe operations separately but if you prefer you can put Triple instances with **different operations** setted on the same `Local TripleStore`.
+
+#### Insertion triples
+
+Add triples on the `LocalTripleStore` that will be inserted by the `store()` method.
+
 ```js
 const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
-SaveClient = new Client("http://www.myendpoint.org/sparql");
-SaveClient.setOptions(
+const SaveClient = new Client("http://www.myendpoint.org/sparql");
+const SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
   "http://www.myschema.org/resource/"
@@ -42,150 +75,291 @@ SaveClient.getLocalStore().add(
   new Triple(
     "myprefix:id123",
     "rdfs:label",
-    new Text("A new lable", "en")
+    new Text("A new lable", "en"),
+    Triple.ADD
   )
 );
+
+SaveClient.store(true)
+.then((result)=>{
+  console.log(result)
+})
+.catch(err) => {
+  console.log(err);
+});
+```
+
+Note that by default every `Triple` is created with the `Triple.ADD` operation setted but it is also possible to be specified as a fourth argument of the constructor.
+You can also set this with the `setOperation()` method on a Triple instance.
+
+#### Deletion triples
+
+Add triples on the `LocalTripleStore` that will be deleted by the `store()` method.
+
+```js
+const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
+
+const SaveClient = new Client("http://www.myendpoint.org/sparql");
+const SaveClient.setOptions(
+  "application/json",
+  {"myprefix": "http://www.myschema.org/ontology/"},
+  "http://www.myschema.org/resource/"
+);
+
 SaveClient.getLocalStore().add(
   new Triple(
     "myprefix:id123",
-    "owl:sameAs",
-    new Node("http://dbpedia.org/resource/Sardinia")
+    "rdfs:label",
+    new Text("A new lable", "en"),
+    Triple.REMOVE
   )
 );
+
 SaveClient.store(true)
 .then((result)=>{
-  console.log(JSON.stringify(result))
+  console.log(result)
 })
-.catch(console.log);
+.catch(err) => {
+  console.log(err);
+});
 ```
 
-## Query Methods
+#### Update triples
 
-#### `query(queryString [, echo])`
-Executes the query, returns a Promise that, when resolved, gives the complete result object.
- - `queryString` defines the SPARQL query as a String.
- - `echo` set to 'true' to print query in standard console. 'false' is the default value.
+Add triples on the `LocalTripleStore` that will be updated by the `store()` method.
 
-#### `store([echo])`
-Stores the triples locally saved and cleans the local triple store. If the store query is bigger than 10kb (exactly 9900byte, just to be safe), it cuts the query in part smaller than 9900 byte and stores the parts one by one. Returns an array of promises that, when resolved, give the complete result object.
- - `echo` set to 'true' to print query in standard console. 'false' is the default value
+```js
+const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
-#### `strip(className [, echo])`
-Deletes data from individuals which have rdf:type 'className'.
-Does not remove statements where the property is dcterms:created, owl:sameAs or rdf:type and where the property is a 'className' owl:hasKey.
- - `className` the rdf:type of Individuals which have to be emptied. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
- - `echo` set to 'true' to print query in standard console. 'false' is the default value.
+const SaveClient = new Client("http://www.myendpoint.org/sparql");
+const SaveClient.setOptions(
+  "application/json",
+  {"myprefix": "http://www.myschema.org/ontology/"},
+  "http://www.myschema.org/resource/"
+);
 
-#### `different(individuals [, echo])`
-Makes 'individuals' different.
- - `individuals` Array of different individuals. Elements can be a full IRI or a prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
- - `echo` set to 'true' to print query in standard console. 'false' is the default value.
+let updatedTriple = new Triple(
+  "myprefix:id123",
+  "rdfs:label",
+  new Text("A new label", "en"),
+  Triple.UPDATE
+);
+updatedTriple.setPrevious(
+  new Triple(
+    "myprefix:id123",
+    "rdfs:label",
+    new Text("A new lable", "en"),
+  )
+);
+SaveClient.getLocalStore().add(updatedTriple);
 
-#### `keys(className [, echo])`
-Returns a Promise that, when resolved, gives an Array that contains all the key properties for 'className'.
-- `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
-- `echo` set to 'true' to print query in standard console. 'false' is the default value.
-
-#### `isKey(className, keyProperty [, echo])`
-Checks if 'keyProperty' is a key for 'className'. Returns a Promise that, when resolved, gives a boolean value.
-- `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
-- `keyProperty` the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
-- `echo` set to 'true' to print query in standard console. 'false' is the default value.
-
-#### `map(className, keyProperty [, recursive [, echo]])`
-Checks if the axiom "'className' owl:hasKey 'keyProperty'" is present, if true, returns a Promise that, when resolved, gives a 'new Map()' that has the keyProperty values (in lower case) as keys and the related individuals IRIs as values.
- - `className` the rdf:type of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
- - `keyProperty` the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
- - `recursive` set to 'true' to set into the map also the Individuals that are instances of subclasses of `className`. 'false' is the default value.
- - `echo` set to 'true' to print query in standard console. 'false' is the default value.
-
-## Util Methods
-
-#### `getLocalStore()`
-Returns the local store, it is an instance of TripleLocalStore class and exports this methods:
- - getLocalStore().add(triple)            // 'triple' mast be an instance of Triple
- - getLocalStore().empty()                // Cleans the local store
- - getLocalStore().toTriplePattern()      // Returns the Triple Pattern as a String
- - getLocalStore().prefixes               // Returns the prefixes object
- - getLocalStore().setPrefixes(prefixes)  // Set a new object of prefixes
- - getLocalStore().addPrefixes(prefixes)  // Add the prefixes to the local list
- - getLocalStore().now                    // Returns new Date().toISOString()
- - getLocalStore().size                   // Return the number of triples          
-The local store instances are iterable objects
+SaveClient.store(true)
+.then((result)=>{
+  console.log(result)
+})
+.catch(err) => {
+  console.log(err);
+});
 ```
+
+## Client Query Methods
+
+### `query(queryString, [echo])`
+
+Executes the query, returns a `Promise` that, when resolved, gives the complete result object.
+
+- `queryString` - defines the SPARQL query as a String.
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `store([echo])`
+
+Stores locally saved (`LocalTripleStore`) triples, cache the execution and empty the client `LocalTripleStore`. Returns an array of promises that, when resolved, give the complete result object.
+
+If there are triples in the `LocalTripleStore` with different operations the same operations are **chunked** and executed in the provided **sequential order**.
+
+Note that if the store query is bigger than ~8MB (exactly 8.388.608 byte), or the number of triples is bigger than 1024 (Virtuoso seems to support only 1426 triples per query) it cuts the query in smaller part and stores the parts one by one.
+
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `strip(className, [echo])`
+
+Deletes data from individuals of `rdf:type` `className`.
+Does **not remove** statements where the property is `dcterms:created`, `owl:sameAs` or `rdf:type` and where the property is a `owl:hasKey` of `className`.
+
+- `className` - the `rdf:type` of individuals which have to be emptied. Accepts full IRI or prefix:ClassName if the prefix is set in the Client Default or Client Query prefixes.
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `different(individuals, [echo])`
+
+Makes individuals different.
+
+- `individuals` - Array of different individuals. Elements can be a full IRI or a prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `keys(className, [echo])`
+
+Returns a Promise that, when resolved, gives an Array that contains all the key properties for `className`.
+
+- `className` - the `rdf:type` of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `isKey(className, keyProperty, [echo])`
+
+Checks if `keyProperty` is a key for `className`. Returns a Promise that, when resolved, gives a boolean value.
+
+- `className` - the `rdf:type` of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `keyProperty` - the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+### `map(className, keyProperty, [recursive], [echo])`
+
+Checks if the axiom `<className> owl:hasKey <keyProperty>` is present, if true, returns a Promise that, when resolved, gives a new `Map` that has the keyProperty values (in lower case) as keys and the related individuals IRIs as values.
+
+- `className` - the `rdf:type` of Individuals on which the map is created. Accepts full IRI or prefix:ClassName if the prefix is set in Client Default or Client Query prefixes.
+- `keyProperty` - the property which becomes the map key. Accepts full IRI or prefix:PropertyName if the prefix is set in Client Default or Client Query prefixes.
+- `recursive` (optional) - set to `true` to set into the map also the Individuals that are instances of subclasses of `className` (default `false`).
+- `echo` (optional) - set to `true` to print query in standard console (default `false`).
+
+## Client Config Methods
+
+### `setDefaultFormat(format)`
+
+Sets the default format for the Client.
+
+- `format` - the format as a String (ex. `application/json`), see [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats) for more info.
+
+### `setDefaultPrefixes(prefixes)`
+
+Sets a list of default prefixes for the Client.
+
+- `prefixes` - list of prefixes as an Object.
+    ```js
+    const prefixes = {
+      myprefix: "http://www.myschema.org/ontology/",
+      ex: "http://example.org/ontology#"
+    };
+    ```
+
+### `addPrefixes(prefixes)`
+
+Adds a list of prefixes to default prefixes for the Client.
+
+- `prefixes` - list of prefixes as an Object.
+    ```js
+    const prefixes = {
+      myprefix: "http://www.myschema.org/ontology/",
+      ex: "http://example.org/ontology#"
+    };
+    ```
+
+### `setDefaultGraph(graph)`
+
+Sets the default graph for the Client.
+
+- `iri` - the graph iri as a String;
+
+### `setOptions([format], [prefixes], [graph])`
+
+Sets the default options for the Client
+
+- `format` (optional) - the default format as a String (ex. `application/json`), see [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats) for more info (default `application/ld+json`).
+- `prefixes` (optional) - list of default prefixes as an Object.
+    ```js
+    let prefixes = {
+      myprefix: "http://www.myschema.org/ontology/",
+      ex: "http://example.org/ontology#"
+    };
+    ```
+- `graph` (optional) - the default graph IRI as a String.
+
+### `setQueryGraph(iri)`
+
+Sets the graph for the query
+
+- `iri` - the graph IRI as a String.
+
+### `setQueryFormat(format)`
+
+Sets a format for the query
+
+- `format` - the format as a String (ex. `application/json`), see [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats) for more info.
+
+### `setQueryPrefixes(prefixes)`
+
+Sets a list of prefixes for the query
+
+- `prefixes` - list of prefixes as an Object.
+    ```js
+    let prefixes = {
+      myprefix: "http://www.myschema.org/ontology/",
+      ex: "http://example.org/ontology#"
+    };
+    ```
+
+### `setQueryMaxrows(rows)`
+
+Sets a maximum numbers of rows that should be returned by the query
+
+- `rows` - maximum number, note that the Virtuoso maximum default is 10000 rows.
+
+### Virtuoso Supported Parameters
+
+- query
+- default-graph-uri
+- maxrows
+
+For more info see: [Virtuoso HTTP Request Parameters](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#HTTP%20Request%20Parameters)
+
+## Client Util Methods
+
+### `getLocalStore()`
+
+Returns the local store, it is an instance of `LocalTripleStore` class that exports this methods:
+
+- **`getLocalStore().add(triple)`** - add an instance of Triple (`triple`) in the local store.
+- **`getLocalStore().empty()`** - cache the triple in the `cache` Array and cleans the local store.
+- **`getLocalStore().toTriplePattern()`** - returns the triple pattern `<subject> <predicate> <object>` of each triple as a single String.
+- **`getLocalStore().prefixes`** - returns the prefixes object.
+- **`getLocalStore().setPrefixes(prefixes)`** - set a new object of prefixes.
+- **`getLocalStore().addPrefixes(prefixes)`** - add the prefixes to the local list.
+- **`getLocalStore().now`** - returns a string of the JavaScript Date object in the ISO format.
+- **`getLocalStore().size`** - return the number of triples.
+- **`getLocalStore().last`** - return the last triple in the Array of triples.
+- **`getLocalStore().cache`** - return the cache of triples stored divided in blocks of store operations.
+
+The `LocalTripleStore` instances are iterable objects
+
+```js
 for (let triple of myClient.getLocalStore()) {
-  console.log(triple)
+  console.log(triple); // triple is an instance of Triple
 }
 ```
 
-## Config Methods
+## Triple Methods
 
-#### `setDefaultFormat(format)`
-Sets the default format for the Client
- - `format` the format as a String (ex. 'application/json'); [Virtuoso Response
+### `getOperation()`
 
-#### `setDefaultPrefixes(prefixes)`
-Sets a list of default prefixes for the Client
- - `prefixes` list of prefixes as an Object;
-    ```js
-    let prefixes = {
-      myprefix: "http://www.myschema.org/ontology/",
-      ex: "http://example.org/ontology#"
-    };
-    ```
+Get the operation String of the `Triple` instance.
 
-#### `addPrefixes(prefixes)`
-Adds a list of prefixes to default prefixes for the Client
- - `prefixes` list of prefixes as an Object;
-    ```js
-    let prefixes = {
-      myprefix: "http://www.myschema.org/ontology/",
-      ex: "http://example.org/ontology#"
-    };
-    ```
+### `setOperation(operation)`
 
-#### `setDefaultGraph(graph)`
-Sets the default graph for the Client
- - `iri` the graph iri as a String;
+Set the `operation` of the `Triple` instance, must be one of `Triple.ADD`, `Triple.REMOVE`, `Triple.UPDATE`.
 
-#### `setOptions([format, prefixes, graph])`
-Sets the default options for the Client
- - `format` the default format as a String (ex. 'application/json'); [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats)
- - `prefixes` list of default prefixes as an Object;
-    ```js
-    let prefixes = {
-      myprefix: "http://www.myschema.org/ontology/",
-      ex: "http://example.org/ontology#"
-    };
-   ```
- - `graph` the default graph iri as a String;
+### `getPrevious()`
 
-#### `setQueryGraph(iri)`
-Sets the graph for the query
- - `iri` the graph iri as a String;
+Get the previous version of the `Triple` instance (ex. before an update operation).
 
-#### `setQueryFormat(format)`
-Sets a format for the query
- - `format` the format as a String (ex. 'application/json');
+### `setPrevious(previous)`
 
-#### `setQueryPrefixes(prefixes)`
-Sets a list of prefixes for the query
- - `prefixes` list of prefixes as an Object;
-    ```js
-    let prefixes = {
-      myprefix: "http://www.myschema.org/ontology/",
-      ex: "http://example.org/ontology#"
-    };
-    ```
+Set the `previous` version of the `Triple` instance, must be an instance of Triple and must exist in the Virtuoso endpoint.
 
-#### `setQueryMaxrows(rows)`
-Sets a maximum numbers of rows that should be returned by the query
- - `rows` maximum number;
+### `toTriplePattern()`
 
-## Notes
-#### Supported Parameters
-* query
-* default-graph-uri
-* maxrows
+Returns the triple pattern `<subject> <predicate> <object>` of the `Triple` instance as a String.
 
-[Virtuoso HTTP Request Parameters](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#HTTP%20Request%20Parameters)
+## Triple Getter
+
+- **`byteLength`** - get the size in byte of the triple pattern `<subject> <predicate> <object>` String.
+- **`ADD`** (static) - get the `ADD` operation String.
+- **`REMOVE`** (static) - get the `REMOVE` operation String.
+- **`UPDATE`** (static) - get the `UPDATE` operation String.
