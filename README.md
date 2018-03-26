@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/virtuoso-sparql-client.svg)](https://www.npmjs.com/package/virtuoso-sparql-client) [![npm](https://img.shields.io/npm/dw/virtuoso-sparql-client.svg)](https://www.npmjs.com/package/virtuoso-sparql-client) [![GitHub issues](https://img.shields.io/github/issues-raw/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/issues) [![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/pulls?q=is%3Apr+is%3Aclosed) [![GitHub contributors](https://img.shields.io/github/contributors/crs4/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/graphs/contributors) [![Known Vulnerabilities](https://snyk.io/test/npm/virtuoso-sparql-client/badge.svg?style=flat-square)](https://snyk.io/test/npm/virtuoso-sparql-client) [![npm](https://img.shields.io/npm/l/virtuoso-sparql-client.svg)](https://github.com/crs4/virtuoso-sparql-client/blob/master/LICENSE)
 
-> An HTTP client to using a Virtuoso SPARQL endpoint in Node.js.
+> An HTTP client for a Virtuoso SPARQL endpoint in Node.js.
 
 ## Table of contents
 
@@ -10,12 +10,12 @@
 - [Usage](#usage)
   - [Query](#query)
   - [Store](#store)
-    - [Insertion triples](#insertion-triples)
-    - [Deletion triples](#deletion-triples)
-    - [Update triples](#update-triples)
 - [Client Query Methods](#client-query-methods)
 - [Client Config Methods](#client-config-methods)
 - [Client Util Methods](#client-util-methods)
+- [Node](#node)
+- [Text](#text)
+- [Data](#data)
 - [Triple Methods](#triple-methods)
 - [Triple Getter](#triple-getter)
 
@@ -66,7 +66,7 @@ const SaveClient.setOptions(
 
 SaveClient.getLocalStore().add(
   new Triple(
-    "myprefix:id123",
+    new Node("http://www.myschema.org/ontology/id123"),
     "dcterms:created",
     new Data(SaveClient.getLocalStore().now, "xsd:dateTimeStamp")
   )
@@ -164,6 +164,14 @@ SaveClient.store(true)
 
 ## Client Query Methods
 
+### `constructor(endpoint)`
+
+A `new Client()` is constructed using an `endpoint` in `String` format that is the URL of the SPARQL endpoint of Virtuoso (ex. `http://dbpedia.org/sparql`)
+
+```js
+new Client("http://www.myendpoint.org/sparql")
+```
+
 ### `query(queryString, [echo])`
 
 Executes the query, returns a `Promise` that, when resolved, gives the complete result object.
@@ -173,7 +181,7 @@ Executes the query, returns a `Promise` that, when resolved, gives the complete 
 
 ### `store([echo])`
 
-Stores locally saved (`LocalTripleStore`) triples, cache the execution and empty the client `LocalTripleStore`. Returns an array of promises that, when resolved, give the complete result object.
+Stores locally saved triples (from the `LocalTripleStore`), cache the execution and empty the client `LocalTripleStore`. Returns an array of promises that, when resolved, give the complete result object.
 
 If there are triples in the `LocalTripleStore` with different operations the same operations are **chunked** and executed in the provided **sequential order**.
 
@@ -335,7 +343,47 @@ for (let triple of myClient.getLocalStore()) {
 }
 ```
 
+## Node
+
+### `constructor(iri)`
+
+A `new Node()` is constructed using an `iri` as a `String` of a valid IRI.
+
+```js
+new Node('http://www.myschema.org/ontology/id123')
+```
+
+## Text
+
+### `constructor(value, [language])`
+
+A `new Text()` is constructed using the text itself (`value`) and an optional `language` (default `null`) both as a `String`.
+
+```js
+new Text('A new label', 'en')
+new Text('A new label', 'en-US')
+```
+
+Note that, if used the `language` must be a valid language identifier (RFC 3066), for more info: [xsd:language](http://www.datypic.com/sc/xsd/t-xsd_language.html).
+
+## Data
+
+### `constructor(value, [type])`
+
+A `new Data()` is constructed using the data itself (`value`) and an optional `type` (default `null`) both as a `String`.
+
+```js
+new Data('This is a message', 'xsd:string')
+new Data('true', 'xsd:boolean')
+new Data('2018-06-30T16:20:00Z', 'xsd:dateTimeStamp')
+```
+
 ## Triple Methods
+
+### `constructor(subject, predicate, object, [operation])`
+
+A `new Triple()` is constructed using a `subject`, a `predicate` and a `object` and optionally an operation (default `Triple.ADD`).
+Each one of `subject`, `predicate` and `object` can be an instance of `Node`, `Data`, `Text` or simple `String` (in IRI or using `prefix:id` format).
 
 ### `getOperation()`
 
