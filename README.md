@@ -48,7 +48,7 @@ DbPediaClient.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>')
 
 Use a `LocalTripleStore` with an instantiated `Client` filled with some triples and call the `store()` method to execute insertion, deletions or updates on a SPARQL endpoint.
 
-Note that we describe operations separately but if you prefer you can put Triple instances with **different operations** setted on the same `Local TripleStore`.
+Note that we describe operations separately but if you prefer you can put Triple instances with **different operations** setted on the same `LocalTripleStore`.
 
 #### Insertion triples
 
@@ -138,20 +138,62 @@ const SaveClient.setOptions(
   "http://www.myschema.org/resource/"
 );
 
-let updatedTriple = new Triple(
+// Update a triple, method one
+let updateOne = new Triple(
   "myprefix:id123",
   "rdfs:label",
   new Text("A new label", "en"),
   Triple.UPDATE
 );
-updatedTriple.setPrevious(
+updateOne.setPrevious(
   new Triple(
     "myprefix:id123",
     "rdfs:label",
     new Text("A new lable", "en"),
   )
 );
-SaveClient.getLocalStore().add(updatedTriple);
+SaveClient.getLocalStore().add(updateOne);
+
+SaveClient.store(true)
+.then((result)=>{
+  console.log(result)
+})
+.catch(err) => {
+  console.log(err);
+});
+```
+
+When updating more than one triple at the same time is needed, the `bulk`  method allows to reduce the total number of queries. It avoids to create a double query for every triple (the first query to remove the old triple and second to insert the new one) but bulks all the triples to remove in a single query and the modified triples that must to be added in the next query. In this way, modifing 20 triples produces just 2 queries, instead of 40.
+
+```js
+const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
+
+const SaveClient = new Client("http://www.myendpoint.org/sparql");
+const SaveClient.setOptions(
+  "application/json",
+  {"myprefix": "http://www.myschema.org/ontology/"},
+  "http://www.myschema.org/resource/"
+);
+
+let updateTwo = new Triple(
+  "myprefix:id123",
+  "rdfs:label",
+  new Text("A new label", "en"),
+).update(
+  "myprefix:id123",
+  "myprefix:label",
+  new Text("A very new label", "en")
+);
+SaveClient.getLocalStore().add(updateTwo);
+
+let updateThree = new Triple(
+  "myprefix:id123",
+  "rdfs:label",
+  new Text("A new label", "en"),
+).updateObject(
+  new Text("A very new label", "en")
+);
+SaveClient.getLocalStore().bulk([updateTwo, updateThree]);
 
 SaveClient.store(true)
 .then((result)=>{
@@ -325,6 +367,7 @@ For more info see: [Virtuoso HTTP Request Parameters](https://virtuoso.openlinks
 Returns the local store, it is an instance of `LocalTripleStore` class that exports this methods:
 
 - **`getLocalStore().add(triple)`** - add an instance of Triple (`triple`) in the local store.
+- **`getLocalStore().bulk(triples)`** - add an array of Triple (`triples`), wich have the same operation type, in the local store.
 - **`getLocalStore().empty()`** - cache the triple in the `cache` Array and cleans the local store.
 - **`getLocalStore().toTriplePattern()`** - returns the triple pattern `<subject> <predicate> <object>` of each triple as a single String.
 - **`getLocalStore().prefixes`** - returns the prefixes object.
@@ -373,9 +416,9 @@ Note that, if used the `language` must be a valid language identifier (RFC 3066)
 A `new Data()` is constructed using the data itself (`value`) and an optional `type` (default `null`) both as a `String`.
 
 ```js
-new Data('This is a message', 'xsd:string')
-new Data('true', 'xsd:boolean')
-new Data('2018-06-30T16:20:00Z', 'xsd:dateTimeStamp')
+new Data(123, 'xsd:integer')
+new Data(true, 'xsd:boolean')
+new Data(new Date().toISOString(), 'xsd:dateTimeStamp')
 ```
 
 ## Triple Methods
@@ -400,6 +443,14 @@ Get the previous version of the `Triple` instance (ex. before an update operatio
 ### `setPrevious(previous)`
 
 Set the `previous` version of the `Triple` instance, must be an instance of Triple and must exist in the Virtuoso endpoint.
+
+### `update([subject], [predicate], [object])`
+
+Transform this triple setting the parameters as new values for subject, predicate and object and the operation as `Triple.UPDATE` and set the original triple as `previous`.
+
+### `updateObject(object)`
+
+A shortcut to `update([subject], [predicate], [object])` when only the object has to be updated.
 
 ### `toTriplePattern()`
 
