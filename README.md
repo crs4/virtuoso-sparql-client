@@ -58,7 +58,7 @@ Add triples on the `LocalTripleStore` that will be inserted by the `store()` met
 const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
 const SaveClient = new Client("http://www.myendpoint.org/sparql");
-const SaveClient.setOptions(
+SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
   "http://www.myschema.org/resource/"
@@ -100,7 +100,7 @@ Add triples on the `LocalTripleStore` that will be deleted by the `store()` meth
 const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
 const SaveClient = new Client("http://www.myendpoint.org/sparql");
-const SaveClient.setOptions(
+SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
   "http://www.myschema.org/resource/"
@@ -132,7 +132,7 @@ Add triples on the `LocalTripleStore` that will be updated by the `store()` meth
 const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
 const SaveClient = new Client("http://www.myendpoint.org/sparql");
-const SaveClient.setOptions(
+SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
   "http://www.myschema.org/resource/"
@@ -169,7 +169,7 @@ When updating more than one triple at the same time is needed, the `bulk`  metho
 const {Client, Node, Text, Data, Triple} = require('virtuoso-sparql-client');
 
 const SaveClient = new Client("http://www.myendpoint.org/sparql");
-const SaveClient.setOptions(
+SaveClient.setOptions(
   "application/json",
   {"myprefix": "http://www.myschema.org/ontology/"},
   "http://www.myschema.org/resource/"
