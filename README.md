@@ -39,7 +39,7 @@ DbPediaClient.query('DESCRIBE <http://dbpedia.org/resource/Sardinia>')
   .then((results) => {
     console.log(results);
   })
-  .catch(err) => {
+  .catch((err) => {
     console.log(err);
   });
 ```
@@ -84,7 +84,7 @@ SaveClient.store(true)
 .then((result)=>{
   console.log(result)
 })
-.catch(err) => {
+.catch((err) => {
   console.log(err);
 });
 ```
@@ -119,7 +119,7 @@ SaveClient.store(true)
 .then((result)=>{
   console.log(result)
 })
-.catch(err) => {
+.catch((err) => {
   console.log(err);
 });
 ```
@@ -158,7 +158,7 @@ SaveClient.store(true)
 .then((result)=>{
   console.log(result)
 })
-.catch(err) => {
+.catch((err) => {
   console.log(err);
 });
 ```
@@ -199,7 +199,7 @@ SaveClient.store(true)
 .then((result)=>{
   console.log(result)
 })
-.catch(err) => {
+.catch((err) => {
   console.log(err);
 });
 ```
