@@ -302,25 +302,53 @@ Adds a list of prefixes to default prefixes for the Client.
     };
     ```
 
+### `setDefaultDefines(defines)`
+
+Sets a list of default defines for the Client.
+
+- `defines` - list of defines as an Object.
+    ```js
+    const defines = {
+      "input:inference": "urn:owl:inference:rules:tests"
+    };
+    ```
+
+### `addDefines(defines)`
+
+Adds a list of defines to default defines for the Client.
+
+- `defines` - list of defines as an Object.
+    ```js
+    const defines = {
+      "input:inference": "urn:owl:inference:rules:tests"
+    };
+    ```
+
 ### `setDefaultGraph(graph)`
 
 Sets the default graph for the Client.
 
 - `iri` - the graph iri as a String;
 
-### `setOptions([format], [prefixes], [graph])`
+### `setOptions([format], [prefixes], [graph], [defines])`
 
 Sets the default options for the Client
 
 - `format` (optional) - the default format as a String (ex. `application/json`), see [Virtuoso Response Formats](https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VOSSparqlProtocol#SPARQL%20Protocol%20Server%20Response%20Formats) for more info (default `application/ld+json`).
 - `prefixes` (optional) - list of default prefixes as an Object.
     ```js
-    let prefixes = {
+    const prefixes = {
       myprefix: "http://www.myschema.org/ontology/",
       ex: "http://example.org/ontology#"
     };
     ```
 - `graph` (optional) - the default graph IRI as a String.
+- `defines` (optional) - list of default defines as an Object. See [Virtuoso Define Pragmas](http://docs.openlinksw.com/virtuoso/rdfsparqlimplementatioptragmas/) for more info.
+    ```js
+    const defines = {
+      "input:inference": "urn:owl:inference:rules:tests"
+    };
+    ```
 
 ### `setQueryGraph(iri)`
 
@@ -340,9 +368,20 @@ Sets a list of prefixes for the query
 
 - `prefixes` - list of prefixes as an Object.
     ```js
-    let prefixes = {
+    const prefixes = {
       myprefix: "http://www.myschema.org/ontology/",
       ex: "http://example.org/ontology#"
+    };
+    ```
+
+### `setQueryDefines(defines)`
+
+Sets a list of defines for the query
+
+- `defines` - list of defines as an Object.
+    ```js
+    const defines = {
+      "input:inference": "urn:owl:inference:rules:tests"
     };
     ```
 

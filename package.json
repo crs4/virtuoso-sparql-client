@@ -1,6 +1,6 @@
 {
   "name": "virtuoso-sparql-client",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Simple Virtuoso SPARQL client",
   "homepage": "https://github.com/crs4/virtuoso-sparql-client#readme",
   "keywords": [
@@ -18,7 +18,7 @@
   },
   "contributors": [
     {
-      "name": "Stedano Fadda",
+      "name": "Stefano Fadda",
       "email": "stefano@crs4.it",
       "url": "http://www.crs4.it/peopledetails/432/stefano-salvatore-fadda/"
     },
